@@ -4,7 +4,7 @@ require 'set'
 class Scrabble
 
   def initialize dictpath = "/usr/share/dict/words"
-    @words = File.readlines(dictpath).map(&:chomp).map(&:downcase).uniq.reject { |w| w.length == 1 }
+    @words = File.readlines(dictpath).map(&:chomp).map(&:downcase).uniq.select { |w| w.length.between?(2, 7) }
   end
 
   def cheat tiles
