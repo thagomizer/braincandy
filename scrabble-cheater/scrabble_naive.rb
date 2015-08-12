@@ -1,14 +1,12 @@
 require 'pp'
-require 'set'
 
 class Scrabble
 
   def initialize dictpath = "/usr/share/dict/words"
-    @words = File.readlines(dictpath).map(&:chomp).map(&:downcase).uniq.select { |w| w.length.between?(2, 7) }
+    @words = File.readlines(dictpath).map(&:chomp).map(&:downcase).select { |w| w.length.between?(2, 8) }
   end
 
   def cheat tiles
-    ts = Set.new tiles
     found = []
 
     @words.each do |w|
@@ -110,19 +108,13 @@ class Rack
   end
 end
 
-
-# LETTERS = ("a".."z").to_a
-
-# p LETTERS
-
-# rack = 7.times.map { LETTERS.sample }
-
 rack = Rack.new_rack
 
 puts "RACK: #{rack.join('')}"
 
 cheater = Scrabble.new
 words = cheater.cheat(rack)
-words.sort_by! { |x| x.length }
 
-puts "Found #{words.length} words. Longest is #{words.last}"
+pp words
+
+puts "Found #{words.length} words. Longest is #{words.max_by(&:length)}"
