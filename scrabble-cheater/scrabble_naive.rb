@@ -4,6 +4,7 @@ class Scrabble
 
   def initialize dictpath = "/usr/share/dict/words"
     @words = File.readlines(dictpath).map(&:chomp).map(&:downcase).select { |w| w.length.between?(2, 8) }
+    puts @words.length
   end
 
   def cheat tiles
