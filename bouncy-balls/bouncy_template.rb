@@ -1,60 +1,61 @@
 #!/usr/bin/env ruby -w
 
 require "graphics"
+require "pp"
+
+COLORS = [:red, :blue, :yellow, :white, :green]
 
 class Ball < Graphics::Body
-  GRAVITY = [0, -2]
+  GRAVITY = V[0, -2]
 
-  attr_accessor :color, :x, :y, :width, :window, :velocity
+  attr_accessor :color, :width
 
   def initialize w
     super
-    @color    = :red
-    @x        = 50
-    @y        = 600
-    @width    = 15
-    @window   = w
-    @velocity = [0, 0]
+    @color    = COLORS.sample
+    @width    = 10
+    @y = rand(w.h / 2) + w.h / 2
   end
 
   def update
     if self.on_edge? then
-      @velocity[1] *= -0.9
+     self.velocity *= -0.9
     end
 
-    @velocity[0] += GRAVITY[0]
-    @velocity[1] += GRAVITY[1]
+    self.velocity += GRAVITY
 
-    @x += @velocity[0]
-    @y += @velocity[1]
+    self.move
 
     self.clip
   end
 
   def on_edge?
-    return true if @x < @width or @y < @width
-    return true if @x >= 640 - @width
-    return true if @y >= 640 - @width
+    return true if @y < @width
+    return true if @y >= self.w.h - @width
   end
 
   def draw
-    #TODO
+    @w.circle @x, @y, @width, @color, true
   end
 end
 
 class BounceSimulation < Graphics::Simulation
   def initialize
     super 640, 640, 16, "Bounce"
-    @ball = Ball.new self
+
+    @balls = populate(Ball, 200)
   end
 
   def update n
-    @ball.update
+    @balls.map(&:update)
   end
 
   def draw n
     self.clear
-    self.circle @ball.x, @ball.y, @ball.width, @ball.color, true
+
+    @balls.each do |ball|
+      ball.draw
+    end
   end
 end
 
