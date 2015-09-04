@@ -6,27 +6,25 @@ require "pp"
 COLORS = [:red, :blue, :yellow, :white, :green]
 
 class Ball < Graphics::Body
-  GRAVITY = V[0, -2]
+  GRAVITY = V[0, -1.5]
 
   attr_accessor :color, :width
 
   def initialize w
     super
     @color    = COLORS.sample
-    @width    = 10
+    @width    = rand(10) + 5
     @y = rand(w.h / 2) + w.h / 2
+    @a = random_angle
+    @m = rand(5)
   end
 
   def update
-    if self.on_edge? then
-     self.velocity *= -0.9
-    end
-
     self.velocity += GRAVITY
 
     self.move
 
-    self.clip
+    self.bounce
   end
 
   def on_edge?
@@ -43,7 +41,7 @@ class BounceSimulation < Graphics::Simulation
   def initialize
     super 640, 640, 16, "Bounce"
 
-    @balls = populate(Ball, 200)
+    @balls = populate(Ball, 15)
   end
 
   def update n
