@@ -6,7 +6,7 @@ require "pp"
 COLORS = [:red, :blue, :yellow, :white, :green]
 
 class Ball < Graphics::Body
-  GRAVITY = V[0, -1.5]
+  GRAVITY = V[0, -0.2]
 
   attr_accessor :color, :width
 
@@ -16,7 +16,7 @@ class Ball < Graphics::Body
     @width    = rand(10) + 5
     @y = rand(w.h / 2) + w.h / 2
     @a = random_angle
-    @m = rand(5)
+    @m = rand(10)
   end
 
   def update
@@ -41,7 +41,7 @@ class BounceSimulation < Graphics::Simulation
   def initialize
     super 640, 640, 16, "Bounce"
 
-    @balls = populate(Ball, 15)
+    @balls = populate(Ball, 50)
   end
 
   def update n
