@@ -51,9 +51,7 @@ class BounceSimulation < Graphics::Simulation
   def draw n
     self.clear
 
-    @balls.each do |ball|
-      ball.draw
-    end
+    @balls.map(&:draw)
   end
 end
 
